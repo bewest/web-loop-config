@@ -1,10 +1,6 @@
 {
-  "name": "hackathon-starter",
+  "name": "web-loop-config",
   "version": "3.4.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
-  },
   "scripts": {
     "start": "node app.js",
     "test": "mocha --reporter spec --timeout 5000"
