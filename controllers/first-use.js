@@ -13,8 +13,14 @@ exports.index = function(req, res) {
   });
 };
 
+function initOpenAPS (req, res) {
+  res.json(req.openaps.wizard);
+}
+
 exports.routes = function (app) {
   var app = express( );
   app.get('/', exports.index);
+  app.post('/initialize', initOpenAPS);
+  app.get('/initialize', initOpenAPS);
   return app;
 }

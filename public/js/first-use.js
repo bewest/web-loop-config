@@ -23,6 +23,7 @@ $(document).ready(function() {
   $('BODY').on('submit', 'FORM', ajax_form);
 
   $('#signup-form').on('io:complete', console.log.bind(console, "SIGNUP", "EV"));
+  $('#initialize').on('io:complete', console.log.bind(console, "INIT", "EV"));
 
 });
 

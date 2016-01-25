@@ -11,6 +11,10 @@ block content
 
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
+      label(class='col-sm-2 control-label', for='name') Name
+      .col-sm-8
+        input.form-control(type='text', name='name', id='name', autofocus=true)
+    .form-group
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7
         input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus)
@@ -30,26 +34,50 @@ block content
 
   h3 Configure System
 
-  ul
-    li Devices
-    li Monitor
-  //- 
-    form.form-horizontal(role='form', method='POST')
+  div
+    form.form-horizontal(id="medtronic_setup", role='form', method='POST', action="initialize")
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
-        label(class='col-sm-2 control-label', for='name') Name
+        label(class='col-sm-2 control-label', for='medtronic_serial') Medtronic serial
         .col-sm-8
-          input.form-control(type='text', name='name', id='name', autofocus=true)
+          input.form-control(type='text', name='medtronic_serial', id='medtronic_serial', autofocus=true)
       .form-group
-        label(class='col-sm-2 control-label', for='email') Email
+        .col-sm-offset-3.col-sm-7
+          button.btn.btn-success(type='submit')
+            i.fa.fa-play
+            | Connect with Medtronic Paradigm pump
+
+
+  div
+    form.form-horizontal(id="dexcom_setup", role='form', method='POST', action="initialize")
+      input(type='hidden', name='_csrf', value=_csrf)
+      .form-group
+        label(class='col-sm-2 control-label', for='dexcom_serial') Dexcom serial
         .col-sm-8
-          input.form-control(type='text', name='email', id='email')
+          input.form-control(type='text', name='dexcom_serial', id='dexcom_serial', autofocus=true)
       .form-group
-        label(class='col-sm-2 control-label', for='message') Body
-        .col-sm-8
-          textarea.form-control(type='text', name='message', id='message', rows='7')
+        .col-sm-offset-3.col-sm-7
+          button.btn.btn-success(type='submit')
+            i.fa.fa-play
+            | Connect with Dexcom G4+Share
+
+  h2 Starting OpenAPS
+  div
+    p.
+      OpenAPS has not started yet.  You can test connectivity here before
+      beginning OpenAPS.
+    ul
+      li
+        button.btn.btn-info(type='button') Test CGM
+      li
+        button.btn.btn-info(type='button') Test Pump
+
+    form.form-horizontal(id="openaps_commence", role='form', method='POST', action="initialize")
+      p.
+        Starting openaps!
       .form-group
-        .col-sm-offset-2.col-sm-8
-          button.btn.btn-primary(type='submit')
-            i.fa.fa-envelope
-            | Send
+        .col-sm-offset-3.col-sm-7
+          button.btn.btn-success(type='submit')
+            i.fa.fa-play
+            | Commence OpenAPS
+
