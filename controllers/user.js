@@ -107,6 +107,10 @@ exports.postSignup = function(req, res, next) {
         if (err) {
           return next(err);
         }
+        if (req.xhr) {
+          res.json({status: 'OK', success: true });
+          return;
+        }
         res.redirect('/');
       });
     });

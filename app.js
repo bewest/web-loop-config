@@ -31,6 +31,7 @@ dotenv.load({ path: '.env.example' });
 /**
  * Controllers (route handlers).
  */
+var firstUseController = require('./controllers/first-use');
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
@@ -106,6 +107,16 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 
+/**
+ * First use wizard
+ */
+var wizard = require('./lib/first-use');
+var firstUse = wizard(app);
+console.log('wizard', wizard);
+app.use(wizard.flag_openaps);
+app.use('/first-use', firstUseController.routes( ));
+// app.get('/first-use', firstUseController.index);
+app.use(wizard.redirect_unconfigured)
 /**
  * Primary app routes.
  */
