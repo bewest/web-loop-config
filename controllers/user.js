@@ -84,7 +84,12 @@ exports.postSignup = function(req, res, next) {
 
   var errors = req.validationErrors();
 
+  console.log("REQ", req.xhr, req);
   if (errors) {
+    if (req.xhr) {
+      res.status(400).json({status: 'error', success: false, errors: errors });
+      return;
+    }
     req.flash('errors', errors);
     return res.redirect('/signup');
   }
@@ -96,20 +101,29 @@ exports.postSignup = function(req, res, next) {
 
   User.findOne({ email: req.body.email }, function(err, existingUser) {
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      errors = { msg: 'Account with that email address already exists.' };
+      req.flash('errors', errors);
+      if (req.xhr) {
+        res.status(400).json({status: 'error', success: false, errors: errors });
+        return;
+      }
       return res.redirect('/signup');
     }
     user.save(function(err) {
       if (err) {
+          if (req.xhr) {
+            res.status(400).json({status: (err ? 'error' : 'OK'), success: (err ? false : true), errors: err });
+          return;
+        }
         return next(err);
       }
       req.logIn(user, function(err) {
+        if (req.xhr) {
+          res.json({status: (err ? 'error' : 'OK'), success: (err ? false : true), errors: err, user: user });
+          return;
+        }
         if (err) {
           return next(err);
-        }
-        if (req.xhr) {
-          res.json({status: 'OK', success: true });
-          return;
         }
         res.redirect('/');
       });

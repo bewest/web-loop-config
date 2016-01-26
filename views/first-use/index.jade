@@ -4,80 +4,120 @@ block content
   .page-header
     h1 Welcome
 
+  div#flash-templates
+    .alert.alert-danger.fade.in
+      button.close(type='button', data-dismiss='alert')
+        i.fa.fa-times-circle-o
+      div.msg
+    .alert.alert-info.fade.in
+      button.close(type='button', data-dismiss='alert')
+        i.fa.fa-times-circle-o
+      div.msg
+    .alert.alert-success.fade.in
+      button.close(type='button', data-dismiss='alert')
+        i.fa.fa-times-circle-o
+      div.msg
 
-  form.form-horizontal(id='signup-form', action="../account/signup", method='POST')
-    p 
-      | Looks like this is your first time!
+  div#wizard(data-ajax-target="./initialize")
+    span.stage
+    
+  div.wizard-steps
 
-    input(type='hidden', name='_csrf', value=_csrf)
-    .form-group
-      label(class='col-sm-2 control-label', for='name') Name
-      .col-sm-8
-        input.form-control(type='text', name='name', id='name', autofocus=true)
-    .form-group
-      label.col-sm-3.control-label(for='email') Email
-      .col-sm-7
-        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus)
-    .form-group
-      label.col-sm-3.control-label(for='password') Password
-      .col-sm-7
-        input.form-control(type='password', name='password', id='password', placeholder='Password')
-    .form-group
-      label.col-sm-3.control-label(for='confirmPassword') Confirm Password
-      .col-sm-7
-        input.form-control(type='password', name='confirmPassword', id='confirmPassword', placeholder='Confirm Password')
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        button.btn.btn-success(type='submit')
-          i.fa.fa-user-plus
-          | Signup
+    .phase.signup.fade.in
+      form.form-horizontal(id='signup-form', action="/signup", method='POST')
+        p 
+          | Howdy, it looks like this is your first time!
+          | Let's claim this rig as yours.
 
-  h3 Configure System
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group.email
+          label.col-sm-3.control-label(for='email') Email
+          .col-sm-7
+            input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus)
+        .form-group.password
+          label.col-sm-3.control-label(for='password') Password
+          .col-sm-7
+            input.form-control(type='password', name='password', id='password', placeholder='Password')
+        .form-group.confirmation
+          label.col-sm-3.control-label(for='confirmPassword') Confirm Password
+          .col-sm-7
+            input.form-control(type='password', name='confirmPassword', id='confirmPassword', placeholder='Confirm Password')
+        .form-group
+          .col-sm-offset-3.col-sm-7
+            button.btn.btn-success(type='submit')
+              i.fa.fa-user-plus
+              | Signup
 
-  div
-    form.form-horizontal(id="medtronic_setup", role='form', method='POST', action="initialize")
-      input(type='hidden', name='_csrf', value=_csrf)
-      .form-group
-        label(class='col-sm-2 control-label', for='medtronic_serial') Medtronic serial
-        .col-sm-8
-          input.form-control(type='text', name='medtronic_serial', id='medtronic_serial', autofocus=true)
-      .form-group
-        .col-sm-offset-3.col-sm-7
-          button.btn.btn-success(type='submit')
-            i.fa.fa-play
-            | Connect with Medtronic Paradigm pump
-
-
-  div
-    form.form-horizontal(id="dexcom_setup", role='form', method='POST', action="initialize")
-      input(type='hidden', name='_csrf', value=_csrf)
-      .form-group
-        label(class='col-sm-2 control-label', for='dexcom_serial') Dexcom serial
-        .col-sm-8
-          input.form-control(type='text', name='dexcom_serial', id='dexcom_serial', autofocus=true)
-      .form-group
-        .col-sm-offset-3.col-sm-7
-          button.btn.btn-success(type='submit')
-            i.fa.fa-play
-            | Connect with Dexcom G4+Share
-
-  h2 Starting OpenAPS
-  div
-    p.
-      OpenAPS has not started yet.  You can test connectivity here before
-      beginning OpenAPS.
-    ul
-      li
-        button.btn.btn-info(type='button') Test CGM
-      li
-        button.btn.btn-info(type='button') Test Pump
-
-    form.form-horizontal(id="openaps_commence", role='form', method='POST', action="initialize")
+    .phase.claim.fade.in
+      h3 Configure System
       p.
-        Starting openaps!
-      .form-group
-        .col-sm-offset-3.col-sm-7
-          button.btn.btn-success(type='submit')
-            i.fa.fa-play
-            | Commence OpenAPS
+        Let's claim the system for your use.
+
+      div
+        form.form-horizontal(id="claim_setup", role='form', method='POST', action="initialize")
+          input(type='hidden', name='_csrf', value=_csrf)
+          .form-group
+            label(class='col-sm-2 control-label', for='name') Name
+            .col-sm-8
+              input.form-control(type='text', name='name', id='name', autofocus=true)
+
+          .form-group
+            label(class='col-sm-2 control-label', for='medtronic_serial') Medtronic serial
+            .col-sm-8
+              input.form-control(type='text', name='medtronic_serial', id='medtronic_serial', autofocus=true)
+
+          .form-group
+            label(class='col-sm-2 control-label', for='dexcom_serial') Dexcom serial
+            .col-sm-8
+              input.form-control(type='text', name='dexcom_serial', id='dexcom_serial', autofocus=true)
+          .form-group
+            .col-sm-offset-3.col-sm-7
+              button.btn.btn-success(type='submit')
+                i.fa.fa-play
+                | Initialize openaps
+
+
+    //- .phase.networking.fade.in
+      h2 Configure WIFI
+      div.wifi-setup
+        form.form-horizontal(id="select-wifi", role='form', method='POST', action="networks/join")
+          .form-group
+            label(class='col-sm-2 control-label', for='network-choice') Network
+            .col-sm-8
+              select.wifi-list.form-control(id="network-choice", data-ajax-target='networks/wifi')
+                //- option.skel(value="")
+                  span.name Foo
+          .form-group
+            label.col-sm-3.control-label(for='passphrase') Passphrase
+            .col-sm-7
+              input.form-control(type='password', name='passphrase', id='passphrase', placeholder='Passphrase')
+          .form-group
+            .col-sm-offset-3.col-sm-7
+              button.btn.btn-success(type='submit')
+                i.fa.fa-play
+                = 'Join '
+                span.chosen-network network
+
+
+    .phase.activate.fade.in
+      h2 Starting OpenAPS
+      div
+        p.
+          OpenAPS has not started yet.  You can test connectivity here before
+          beginning OpenAPS.
+        ul
+          li
+            button.btn.btn-info(type='button') Test CGM
+          li
+            button.btn.btn-info(type='button') Test Pump
+
+        form.form-horizontal(id="openaps_commence", role='form', method='POST', action="initialize")
+          p.
+            Starting openaps!
+          .form-group
+            .col-sm-offset-3.col-sm-7
+              button.btn.btn-success(type='submit')
+                i.fa.fa-play
+                | Commence OpenAPS
+
 
