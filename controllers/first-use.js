@@ -47,7 +47,7 @@ function claim_device_name (req, res, next) {
 
 function claim_openaps_init (req, res, next) {
 
-  req.run_openaps_initialization({ }, function (err, stdout, stderr) {
+  req.run_openaps_initialization({medtronic: req.body.medtronic_serial, dexcom: req.body.dexcom_serial }, function (err, stdout, stderr) {
     if (err) {
       res.status(406);
     }

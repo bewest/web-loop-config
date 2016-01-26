@@ -37,7 +37,7 @@ EOT
 cd $BASE
 
 setup_mmeowlink $1
-setup_dexcom_ble_device
+setup_dexcom_ble_device $2
 
 monitor_reports
 
