@@ -87,6 +87,7 @@ $(document).ready(function() {
   });
 
   $('#wizard').on('io:complete', conf, function (ev, payload, status, xhr) {
+
     ev.data.wizard.find('.phase').removeClass('active');
     console.log("WIZARD STATE", payload);
     var state = 'signup';
@@ -98,6 +99,30 @@ $(document).ready(function() {
     }
     var selector = '.phase.' + state;
     $(selector).addClass('active');
+  });
+
+  $('#openaps_commence').on('io:complete', conf, function (ev, payload, status, xhr) {
+    console.log('commenced', status);
+    if (status == 'success') {
+      window.location.href = '/';
+    }
+  });
+
+  $('.testing-devices').on('click', '.device-test BUTTON', function (ev) {
+    var control = $(this).closest('LI');
+    control.addClass('testing');
+    var button = $(ev.target);
+    button.prop('disabled', true);
+    control.find('.result').text('')
+    var conf = { url: control.data('test-uri')
+      , method: 'GET'
+    };
+    $.ajax(conf).done(function (body) {
+      console.log("TEST", body);
+      control.addClass('done').removeClass('testing');
+      control.find('.result').text(body)
+      button.prop('disabled', false);
+    });
   });
 });
 

@@ -47,7 +47,7 @@ function claim_device_name (req, res, next) {
 
 function claim_openaps_init (req, res, next) {
 
-  req.run_openaps_initialization({medtronic: req.body.medtronic_serial, dexcom: req.body.dexcom_serial }, function (err, stdout, stderr) {
+  req.run_openaps_initialization({medtronic: req.body.medtronic_serial, dexcom: req.body.dexcom_serial, user: req.user }, function (err, stdout, stderr) {
     if (err) {
       res.status(406);
     }
@@ -59,12 +59,28 @@ function claim_openaps_init (req, res, next) {
 function fmt_claim (req, res, next) {
 }
 
+function ping_device (req, res, next) {
+  console.log('ping', req.params.device);
+  req.openaps.ping_device(req.params, function (err, payload, stderr) {
+
+    res.json(payload);
+  });
+}
+
+function commence_openaps (req, res, next) {
+  req.openaps.commence_crontab({ }, function ( ) {
+    res.json("OK");
+  });
+}
+
 exports.routes = function (app) {
   var app = express( );
   app.get('/', exports.index);
   app.post('/initialize', preview_claim, claim_device_name, claim_openaps_init, fmt_wizard);
   app.post('/claim', preview_claim, claim_device_name, claim_openaps_init, fmt_wizard);
   app.get('/initialize', fmt_wizard);
+  app.get('/ping/:device', ping_device);
   app.get('/networks/wifi', list_networks, fmt_networks);
+  app.post('/commence', commence_openaps);
   return app;
 }

@@ -4,7 +4,7 @@ block content
   .page-header
     h1 Welcome
 
-  div#flash-templates
+  //- div#flash-templates
     .alert.alert-danger.fade.in
       button.close(type='button', data-dismiss='alert')
         i.fa.fa-times-circle-o
@@ -105,16 +105,21 @@ block content
         p.
           OpenAPS has not started yet.  You can test connectivity here before
           beginning OpenAPS.
-        ul
-          li
+        ul.testing-devices
+          li.device-test(data-test-uri="./ping/cgm")
             button.btn.btn-info(type='button') Test CGM
-          li
+            span.busy
+            span.result
+          li.device-test(data-test-uri="./ping/pump")
             button.btn.btn-info(type='button') Test Pump
+            span.busy
+            span.result
 
-        form.form-horizontal(id="openaps_commence", role='form', method='POST', action="initialize")
+        form.form-horizontal(id="openaps_commence", role='form', method='POST', action="commence")
           p.
             Starting openaps!
           .form-group
+            input(type='hidden', name='_csrf', value=_csrf)
             .col-sm-offset-3.col-sm-7
               button.btn.btn-success(type='submit')
                 i.fa.fa-play
