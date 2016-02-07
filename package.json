@@ -54,7 +54,9 @@
     "twilio": "^2.8.0",
     "twit": "^2.1.1",
     "validator": "^4.5.0",
-    "yui": "^3.18.1"
+    "yui": "^3.18.1",
+    "wifiscanner": "0.0.10",
+    "ndbus": "0.0.1"
   },
   "devDependencies": {
     "blessed": "^0.1.81",

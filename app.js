@@ -32,6 +32,7 @@ dotenv.load({ path: '.env.example' });
  * Controllers (route handlers).
  */
 var firstUseController = require('./controllers/first-use');
+var dbusController = require('./controllers/dbus');
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
@@ -120,6 +121,7 @@ app.use(wizard.redirect_unconfigured)
 /**
  * Primary app routes.
  */
+app.use('/dbus', dbusController.routes(app));
 app.get('/', homeController.index);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
